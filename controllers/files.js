@@ -6,42 +6,57 @@ var render = "";
 
 // Common filter
 exports.all = function (req, res, next) {
-    // Filter `..` in path
-    if (/(\/|^)\.\.(\/|$)/i.test(req.params[0])) {
-        return res.send({error: '\'..\' in path is unacceptable'})
-    }
-    currentPath = req.params[0]==='' ? '.' : req.params[0];
-    currentPath = config.filesPath.path + currentPath;
 
     if (req.param('xml')) {
         render = (function(o) {
-            js2xmlparser('xml', o, {
-                arrayMap: {
-                    list: "item"
-                }});
+            if (typeof o == 'object') {
+                res.send(js2xmlparser('xml', o, {
+                    arrayMap: {
+                        list: "item"
+                    }}));
+            } else {
+                res.write(o);
+                res.end();
+            }
+
         });
     } else {
-        render = JSON.stringify;
+        render = (function(o) {
+            if (typeof o == 'object') {
+                res.send(JSON.stringify(o));
+            } else {
+                res.write(o);
+                res.end();
+            }
+
+        });
     }
+
+    // Filter `..` in path
+    if (/(\/|^)\.\.(\/|$)/i.test(req.params[0])) {
+        return render({error: '\'..\' in path is unacceptable'})
+    }
+    currentPath = req.params[0]==='' ? '.' : req.params[0];
+    currentPath = config.filesPath.path + currentPath;
     next();
 }
 
 // Get folder or file
 exports.get = function (req, res) {
-    filesModel.get(currentPath, res.send);
+    filesModel.get(currentPath, render);
 }
 
 // Post file content (must exists)
 exports.post = function (req, res) {
-    filesModel.post(currentPath, res.send);
+    filesModel.post(currentPath, req.body, render);
 }
 
 // Put file or folder (must not exist)
 exports.put = function (req, res) {
-    filesModel.post(currentPath, res.send);
+    filesModel.put(currentPath, req.body, render);
 }
 
 // Delete folder or file must exist, folder must be empty
 exports.delete = function (req, res) {
-    filesModel.delete(currentPath, res.send);
+    filesModel.delete(currentPath, render);
 }

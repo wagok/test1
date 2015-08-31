@@ -29,19 +29,19 @@ exports.get = function (currentPath, result) {
 }
 
 // Post file content (must exists)
-exports.post = function (currentPath, result) {
+exports.post = function (currentPath, data, result) {
     // Check is path ends with '/'
     if (currentPath.indexOf('/', currentPath.length - 1) !== -1) {
         result({message: path + ' is look like a directory'});
     } else {
         // fs.exists() will be deprecated.
         // Just open the file and handle the error when it's not there.
-        fs.open(path, 'w', function (err, fd) {
+        fs.open(currentPath, 'w', function (err, fd) {
             if (err) {
                 result({message: "File is not exist"});
             } else {
                 // Do we have to close fileDesc (fd) here or not?
-                fs.writeFile(path, req.body, function (err) {
+                fs.writeFile(currentPath, data, function (err) {
                     if (err) {
                         return result(err);
                     }
@@ -53,11 +53,10 @@ exports.post = function (currentPath, result) {
 }
 
 // Put file or folder (must not exist)
-exports.put = function (currentPath, result) {
-    var path = currentPath;
-    if (path.indexOf('/', path.length - 1) !== -1) {
+exports.put = function (currentPath, data, result) {
+    if (currentPath.indexOf('/', currentPath.length - 1) !== -1) {
         // Directory end with /
-        fs.mkdir(path, function (err) {
+        fs.mkdir(currentPath, function (err) {
             if (err) {
                 return result(err);
             }
@@ -65,9 +64,9 @@ exports.put = function (currentPath, result) {
         });
     } else {
         // It's file
-        fs.open(path, 'r', function (err, fd) {
+        fs.open(currentPath, 'r', function (err, fd) {
             if (err) {
-                fs.writeFile(path, req.body, function (err) {
+                fs.writeFile(currentPath, data, function (err) {
                     if (err) {
                         return result(err);
                     }
