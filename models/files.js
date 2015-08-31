@@ -26,7 +26,7 @@ exports.get = function (currentPath, result) {
             });
         }
     );
-}
+};
 
 // Post file content (must exists)
 exports.post = function (currentPath, data, result) {
@@ -50,7 +50,7 @@ exports.post = function (currentPath, data, result) {
             }
         });
     }
-}
+};
 
 // Put file or folder (must not exist)
 exports.put = function (currentPath, data, result) {
@@ -64,6 +64,8 @@ exports.put = function (currentPath, data, result) {
         });
     } else {
         // It's file
+        // fs.exists() will be deprecated.
+        // Just open the file and handle the error when it's not there.
         fs.open(currentPath, 'r', function (err, fd) {
             if (err) {
                 fs.writeFile(currentPath, data, function (err) {
@@ -77,7 +79,7 @@ exports.put = function (currentPath, data, result) {
             }
         });
     }
-}
+};
 
 // Delete folder or file must exist, folder must be empty
 exports.delete = function (currentPath, result) {
@@ -105,7 +107,7 @@ exports.delete = function (currentPath, result) {
             });
         }
     );
-}
+};
 // util function
 function fileDir(path, error, isFile, isDir) {
     fs.stat(path, function (err, stats) {

@@ -1,7 +1,6 @@
 var express = require('express');
-var router = express.Router();
 var files = require('../controllers/files');
-
+var router = express.Router();
 
 router.all('/*', files.all);
 
