@@ -7,7 +7,7 @@ var render = "";
 // Common filter
 exports.all = function (req, res, next) {
 
-    if (req.param('xml')) {
+    if (req.param('xml') || req.accepts('xml')) {
         render = (function(o) {
             if (typeof o == 'object') {
                 res.send(js2xmlparser('xml', o, {
