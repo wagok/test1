@@ -2,7 +2,7 @@ var config = require('../config');
 var filesModel = require('../models/files');
 var js2xmlparser = require('js2xmlparser');
 var currentPath = '';
-var render = "";
+var render = null;
 
 // Common filter
 exports.all = function (req, res, next) {
