@@ -29,5 +29,8 @@ DELETE http://localhost:3000/files/test2.txt - удалить файл.
 GET http://localhost:3000/files/folder1/ - получить содержимое папки
 (поддерживаемые форматы: json/xml);
 
+Формат выдачи меняется в зависимости от заголовка Accept запроса. По умолчанию json.
+
 и так далее с созданием и удалением папки
 
+Для запросов POST и PUT важно чтобы присутствовал заголовок Content-type: application/octet-stream
