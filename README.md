@@ -14,4 +14,20 @@ $ node ./bin/www
 
 6. Сервер будет доступен на 3000 порту. http://localhost:3000/
 
+GET http://server.com/files/test.txt - получить содержимое файла.
+
+POST http://server.com/files/test.txt - изменить содержимое файла
+(данные в теле).
+
+PUT http://server.com/files/test2.txt - создать файл с содержимым
+из тела запроса.
+
+DELETE http://server.com/files/test2.txt - удалить файл.
+
+- тоже самое для папок:
+
+GET http://server.com/files/folder1/ - получить содержимое папки
+(поддерживаемые форматы: json/xml);
+
+и так далее с созданием и удалением папки
 
